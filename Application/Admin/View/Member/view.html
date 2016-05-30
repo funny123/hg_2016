@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=">
+<title>后台管理系统</title>
+<link rel="stylesheet" href="__PUBLIC__/Admin/css/css.css">
+<script src="__PUBLIC__/Admin/js/jquery-1.9.1.js"></script>
+<script src="__PUBLIC__/Common/Layer/layer.js"></script>
+    <script src="__PUBLIC__/Common/My97Date/WdatePicker.js"></script>
+<script>
+//添加用户
+function add(){
+	parent.layer.open({
+		type: 2,
+		shadeClose: true,
+		shade: 0.5,
+		area: ['850px', '840px'],
+		title: '添加用户',
+		content: '{:U("Member/member_add")}'
+	});
+}
+//导入excel用户
+function add_excel(){
+    parent.layer.open({
+        type: 2,
+        shadeClose: true,
+        shade: 0.5,
+        area: ['350px', '500'],
+        title: '导入用户',
+        content: '{:U("Member/add_excel")}'
+    });
+}
+//导出excel用户
+function out_excel(){
+    parent.layer.open({
+        type: 2,
+        shadeClose: true,
+        shade: 0.5,
+        area: ['350px', '500'],
+        title: '导出用户',
+        content: '{:U("Member/out_excel")}'
+    });
+}
+//编辑用户
+function edit(id){
+	parent.layer.open({
+		type: 2,
+		shadeClose: true,
+		shade: 0.5,
+		area: ['850px', '840px'],
+		title: '编辑账号信息',
+		content: '{:U("Member/member_edit")}?id='+id
+	});
+}
+function subform(i) {
+
+    var theform=document.form_do;
+    theform.action=i;
+    theform.submit();
+}
+//批量编辑用户经纪人
+function edit_mul(id){
+    parent.layer.open({
+        type: 2,
+        shadeClose: true,
+        shade: 0.5,
+        area: ['850px', '840px'],
+        title: '批量编辑账号信息',
+        content: '{:U("Member/edit_mul")}?id='+id
+    });
+}
+//批量编辑用户经纪人
+function edit_mul2(){
+    $(document).ready(function(){
+        $("#button1").click(function(){
+            $("#form2").submit();
+        });
+    });
+}
+//查看客户手机号
+function viewtel(id){
+    parent.layer.open({
+        type: 2,
+        shadeClose: true,
+        shade: 0.5,
+        area: ['550px', '540px'],
+        title: '查看完整手机号',
+        content: '{:U("Member/viewtel")}?id='+id
+    });
+}
+//时间筛选
+function viewtel(id){
+    parent.layer.open({
+        type: 2,
+        shadeClose: true,
+        shade: 0.5,
+        area: ['550px', '540px'],
+        title: '查看完整手机号',
+        content: '{:U("Member/viewtel")}?id='+id
+    });
+}
+function selectall(whosform){
+    for(var i=0;i<whosform.elements.length;i++){
+        var box = whosform.elements[i];
+        if (box.name != 'chkall')
+            box.checked = whosform.chkall.checked;
+    }
+}
+//删除用户
+function  del(id){
+	$("#del"+id+" td").css('background','#CBDFF2');
+	parent.layer.confirm('真的要销户吗？', {
+		btn: ['确认','取消'], //按钮
+		shade: 0.5 //显示遮罩
+	}, function(){
+		$.post("{:U('Member/member_del')}", { "id": id},function(data){
+			if(data == 1){
+				parent.layer.msg('销户成功', { icon: 1, time: 1000 }, function(){
+						$("#del"+id).remove();
+					});
+			}else{
+				parent.layer.msg('销户失败', {icon: 2, time: 2000 });
+			}
+		}, "json");
+	},function(){
+		$("#del"+id+" td").css('border-top','0');
+		$("#del"+id+" td").css('border-bottom','1px solid #EFEFEF');
+	});
+}
+</script>
+    <script>
+        //弹出搜索框
+
+                $(document).ready(function(){
+                    $("#group").dblclick(function(){
+                        $("#group").html("<input type='text' name='group1' id='group1' size='5' placeholder='小组'/><input type='hidden' value='1' name='sx' id='sx1'/>");
+                        $("#group1").blur(function(){
+                            $("#keyword").val($("#group1").val());
+                            $("#sx").val($("#sx1").val());
+                           $("#group").html("小组");
+                            $("form.formSo").submit();
+
+                        });
+                    });
+                    //
+                    $("#depart").dblclick(function(){
+                        $("#depart").html("<input type='text' name='depart1' id='depart1' size='5' placeholder='部门'/><input type='hidden' value='2' name='sx' id='sx1'/>");
+                        $("#depart1").blur(function(){
+                            $("#keyword").val($("#depart1").val());
+                            $("#sx").val($("#sx1").val());
+                            $("#depart").html("部门");
+                            $("form.formSo").submit();
+
+                });
+                    });
+                    //
+                    $("#agent").dblclick(function(){
+                        $("#agent").html("<input type='text' name='agent1' id='agent1' size='5' placeholder='经纪人'/><input type='hidden' value='3' name='sx' id='sx1'/>");
+                        $("#agent1").blur(function(){
+                            $("#keyword").val($("#agent1").val());
+                            $("#sx").val($("#sx1").val());
+                            $("#agent").html("经纪人");
+                            $("form.formSo").submit();
+
+                        });
+                    });
+                    //
+
+                    $("#jihuot").dblclick(function(){
+                        $("#jihuot").html("<input type='text' name='jihuot1' id='jihuot1' size='5' placeholder='时间'/><input type='hidden' value='4' name='sx' id='sx1'/>");
+                        $("#jihuot1").blur(function(){
+                            $("#keyword").val($("#jihuot1").val());
+                            $("#sx").val($("#sx1").val());
+                            $("#jihuot").html("激活时间");
+                            $("form.formSo").submit();
+
+                        });
+                    });
+                    //
+                    $("#realn").dblclick(function(){
+                        $("#realn").html("<input type='text' name='realn1' id='realn1' size='5' placeholder='姓名'/><input type='hidden' value='5' name='sx' id='sx1'/>");
+                        $("#realn1").blur(function(){
+                            $("#keyword").val($("#realn1").val());
+                            $("#sx").val($("#sx1").val());
+                            $("#realn").html("姓名");
+                            $("form.formSo").submit();
+
+                        });
+                    });
+                    //
+                    $("#codei").dblclick(function(){
+                        $("#codei").html("<input type='text' name='codei1' id='codei1' size='18' placeholder='身份证'/><input type='hidden' value='6' name='sx' id='sx1'/>");
+                        $("#codei1").blur(function(){
+                            $("#keyword").val($("#codei1").val());
+                            $("#sx").val($("#sx1").val());
+                            $("#codei").html("身份证号");
+                            $("form.formSo").submit();
+
+                        });
+                    });
+                    //
+                    $("#loginn").dblclick(function(){
+                        $("#loginn").html("<input type='text' name='loginn1' id='loginn1' size='5' placeholder='交易帐号'/><input type='hidden' value='7' name='sx' id='sx1'/>");
+                        $("#loginn1").blur(function(){
+                            $("#keyword").val($("#loginn1").val());
+                            $("#sx").val($("#sx1").val());
+                            $("#loginn").html("交易账号");
+                            $("form.formSo").submit();
+
+                        });
+                    });
+                    //
+                    $("#group").click(function(){
+                       $("#shai_x").show();
+                        });
+
+
+                    });
+
+//                    });
+
+
+
+
+
+    </script>
+<script>
+    //排序
+    $(document).ready(function(){
+             $("#jihuot").click(function(){
+                 $("#order").val("11");
+//                 $("#jihuot").addClass("jihuotime");
+                 $("form.formPx").submit();
+             });
+        $(".jihuotime").click(function(){
+            $("#order").val("null");
+            $("form.formPx").submit();
+//            $("#jihuot").removeClass("jihuotime");
+        });
+
+
+    });
+
+</script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+                $(".menu1 span").hover(
+                        function() {
+                            $(this).children("div").attr("style", "display: block");
+                        },
+                        function() {
+                            $(this).children("div").attr("style", "");
+                        })
+
+        });
+    </script>
+</head>
+<body>
+
+
+<div class="nav">
+	<div class="nav_title">
+    	<h4><img class="nav_img" src="__PUBLIC__/Admin/img/tab.gif" /><span class="nav_a">客户列表</span></h4>
+
+    </div>
+    <div class="nav_title" id="shai_x">
+    <form name="form1" class="formSo" method="get" action="{:U('Member/member_list')}">
+        <input name="keyword" type="hidden" id="keyword" value="" class="s26" />
+        <input name="sx" type="hidden" id="sx" value="" class="s26" />
+
+        <input type="submit" id="tj" class="btn btn-danger btn-sm" value="">&nbsp;
+    </form>
+    </div>
+    <div class="nav_title" id="paixu">
+        <form name="form3" class="formPx" method="get" action="{:U('Member/member_list')}">
+            <input name="order" type="hidden" id="order" value="" class="s26" />
+
+
+            <input type="submit" id="pxtj" class="btn btn-danger btn-sm" value="">&nbsp;
+        </form>
+    </div>
+    <if condition=" $_SESSION['aid'] eq 1">
+    <div class="nav_button">
+        <a href="javascript:;" onclick="edit_mul2();"><button class="button" id="button1">+ 批量修改</button></a>
+    	<a href="javascript:;" onclick="add();"><button class="button">+ 添加用户</button></a>
+        <a href="javascript:;" onclick="add_excel();"><button class="button">+ 导入用户</button></a>
+        <a href="javascript:;" onclick="out_excel();"><button class="button">+ 导出用户</button></a>
+    </div>
+    </if>
+</div>
+
+
+<div class="list">
+	  <table width="1800" border="0" cellpadding="0" cellspacing="0" class="list_table">
+          <form action="__URL__/edit_mul" method="post" id="form2">
+      <thead>
+	    <tr class="action">
+            <td width="1%"><div align="center"><input  name="chkall" type="checkbox" id="chkall" onclick="selectall(this.form)"></div></td>
+	      <td width="1%" id="add1"><div align="center">ID</div></td>
+	      <td width="1%"><div align="center" id="loginn">交易账户</div></td>
+            <td width="1%"><div align="center" id="monin">模拟帐号</div></td>
+	      <td width="2%"><div align="center" id="realn">真实姓名</div></td>
+            <td width="1%"><div align="center" id="codei">身份证号</div></td>
+	      <td width="1%"><div align="center" id="time" onclick="time();">登录时间</div></td>
+	      <td width="1%"><div align="center">性别</div></td>
+	      <td width="1%"><div align="center">电话</div></td>
+	      <td width="2%"><div align="center" id="agent">经纪人</div></td>
+	      <td width="3%"><div align="center" id="group">小组</div></td>
+            <td width="1%"><div align="center" id="depart">部门</div></td>
+            <td width="3%"><div align="center" id="jihuot" class="jihuotime">激活时间</div></td>
+            <td width="3%"><div align="center">激活资金</div></td>
+            <td width="3%"><div align="center">登录名</div></td>
+            <td width="3%"><div align="center">开户形式</div></td>
+            <td width="4%"><div align="center">操作</div></td>
+        </tr>
+        </thead>
+        <tbody>
+        <foreach name="lists" item="vo">
+
+            <if condition="$vo.cong eq 1 or $vo.cong1 eq 1">
+                <tr id="del{$vo.id}" class="list" align="center" bgcolor="#ffe4c4">
+                    <else/>
+                <tr id="del{$vo.id}" class="list" align="center">
+            </if>
+                <if condition="$vo['status']">
+                <td>
+                    <div align="center"><input type="checkbox" name="user_id[]" value="{$vo.id}"></div>
+                </td>
+                <td height="50" id="add">
+                    <div align="center" id="id">{$vo.id}</div>
+                </td>
+                <td>
+                    <div align="center">{$vo.loginname}</div>
+                </td>
+                <td><div align="center">{$vo.moniname}</div></td>
+                <td>
+                    <if condition="$vo['cong']">
+                        <div align="center" style="background:#999; color:#FFF">{$vo.realname}</div>
+                        <else />
+                        <div align="center">{$vo.realname}</div>
+                    </if>
+                </td>
+                <td>
+                    <if condition="$vo.cong1 eq 1">
+                        <div align="center" style="background-color:#FFF68F">{$vo.codeid}</div>
+                        <else/>
+                        <div align="center">{$vo.codeid}</div>
+                    </if>
+                </td>
+                <td>
+                    <div align="center">{$vo.time|date_for}</div>
+                </td>
+                <td>
+                    <div align="center">{$vo.sex}</div>
+                </td>
+                <td>
+                    <div align="center"><a class="a_button" href="javascript:;" onClick="viewtel({$vo.id});">{$vo.tel}</a>
+                    </div>
+                </td>
+
+                <td>
+                    <div align="center">{$vo.agentname_x}</div>
+                </td>
+                <td>
+                    <div align="center">{$vo.groupname_x}</div>
+                </td>
+                <td>
+                    <div align="center">{$vo.department_x}</div>
+                </td>
+                <td>
+                    <div align="center">{$vo.jihuotime|date_for}</div>
+                </td>
+                <td>
+                    <div align="center">{$vo.jihuomoney}</div>
+                </td>
+                <td>
+                    <div align="center">{$vo.loginuser}</div>
+                </td>
+                <td>
+                    <div align="center">{$vo.kaihuform}</div>
+                </td>
+                <td>
+                    <div align="center">
+                        <a class="a_button" href="javascript:;" onClick="edit({$vo.id});">编辑</a>
+                        <a class="a_button" href="javascript:;" onclick="del({$vo[id]})">销</a>
+                    </div>
+                </td>
+                    <else/>
+                    <td>
+                        <div align="center"><input type="checkbox" name="user_id[]" value="<{$v.id}>"></div>
+                    </td>
+                    <td height="50" id="add">
+                        <s><div align="center" id="id">{$vo.id}</div></s>
+                    </td>
+                    <td>
+                        <s><div align="center">{$vo.loginname}</div></s>
+                    </td>
+                    <td><div align="center">{$vo.moniname}</div></td>
+                    <td>
+                        <s><div align="center">{$vo.realname}</div></s>
+                    </td>
+                    <td>
+                        <s><div align="center">{$vo.codeid}</div></s>
+                    </td>
+                    <td>
+                        <s><div align="center">{$vo.time}</div></s>
+                    </td>
+                    <td>
+                        <s><div align="center">{$vo.sex}</div></s>
+                    </td>
+                    <td>
+                        <div align="center"><a class="a_button" href="javascript:;" onClick="viewtel({$vo.id});">{$vo.tel}</a>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div align="center">{$vo.agentname_x}</div>
+                    </td>
+                    <td>
+                        <div align="center">{$vo.groupname_x}</div>
+                    </td>
+                    <td>
+                        <div align="center">{$vo.department_x}</div>
+                    </td>
+                    <td>
+                        <div align="center">{$vo.jihuotime}</div>
+                    </td>
+                    <td>
+                        <div align="center">{$vo.jihuomoney}</div>
+                    </td>
+                    <td>
+                        <div align="center">{$vo.loginuser}</div>
+                    </td>
+                    <td>
+                        <div align="center">{$vo.kaihuform}</div>
+                    </td>
+                    <td>
+                        <div align="center">
+                            <a class="a_button" href="javascript:;">已销户</a>
+                        </div>
+                    </td>
+                </if>
+            </tr>
+        </foreach>
+        </tbody>
+          </form>
+  </table>
+</div>
+
+<!-- 分页 -->
+<div class="page">
+{$page}
+</div>
+
+
+</body>
+</html>

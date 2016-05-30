@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=">
+<title>客户统计</title>
+<link rel="stylesheet" href="__PUBLIC__/Admin/css/css.css">
+<script src="__PUBLIC__/Admin/js/jquery-1.9.1.js"></script>
+<script src="__PUBLIC__/Common/Layer/layer.js"></script>
+    <script src="__PUBLIC__/Common/My97Date/WdatePicker.js"></script>
+<script>
+//添加用户
+
+function tj_edit1(){
+    var xz_xy = $('#xz_xy11').val();
+
+//    var xz_xksp = $('#xksp_11').val();
+//    var xz_xkmn = $('#xkmn_11').val();
+//    var xz_yjbh = $('#yjbh_11').val();
+//    var xz_sjbh = $('#sjbh_11').val();
+//    var xz_yjsp = $('#yjsp_11').val();
+//    var xz_sjsp = $('#sjsp_11').val();
+//    var xz_wkmn = $('#wkmn_11').val();
+//    var xz_jhgs = $('#jhgs_11').val();
+//    var xz_ecjh = $('#ecjh_11').val();
+//    var xz_yx = $('#yx_11').val();
+
+
+    if(xz_xksp == ''){
+        layer.tips('请输入真实姓名', '#xksp_11');
+        return false;
+    }
+
+
+    $.post(	"__SELF__",{"xz_xy":xz_xy,"xz_xksp":xz_xksp,"xz_xkmn":xz_xkmn,"xz_yjbh":xz_yjbh,"xz_sjbh":xz_sjbh,"xz_yjsp":xz_yjsp
+        ,"jihuotime":jihuotime,"tel":tel,"email":email,"address":address,"sex":sex,"birthday":birthday,"agentname":agentname
+        ,"xz_sjsp":xz_sjsp,"remark":remark,"loginuser":loginuser,"remark":remark,"department":department
+        ,"group":group,"remark":remark},function(data){
+        if(data == 1){
+            layer.msg('添加成功，正在跳转中...',{icon: 1,time: 2000,shade: [0.8, '#393D49']},function(){
+                window.location.reload();    //刷新父页面
+            });
+        }else if(data == 2){
+            layer.msg('分配用户组失败，请重新分配',{icon: 2,time: 2000},function(){
+                window.location.reload();
+            });
+        }else{
+            layer.msg('添加失败，请重新输入',{icon: 2,time: 2000},function(){
+                window.location.reload();
+            });
+        }
+    }, "json");
+}
+
+
+  </script>
+</head>
+<body>
+
+
+<div class="nav">
+	<div class="nav_title">
+    	<h4><img class="nav_img" src="__PUBLIC__/Admin/img/tab.gif" /><span class="nav_a">客户列表</span></h4>
+    </div>
+    <div class="nav_title">
+    <form name="form1" method="POST" action="{:U('Member/member_list')}">
+        &nbsp;关键字:&nbsp;
+        <input name="keyword" type="text" id="keyword" value="" class="s26" placeholder="输入筛选项目">
+        <select name="sx" id="sx">
+            <option value="1">小组</option>
+            <option value="2">部门</option>
+            <option value="3">经纪人</option>
+            <option value="4">开户时间</option>
+        </select>
+        <input id="d5221" name="stime" class="Wdate" type="text" onFocus="var d5222=$dp.$('d5222');WdatePicker({onpicked:function(){d5222.focus();},maxDate:'#F{$dp.$D(\'d5222\')}'})"/>
+        至
+        <input id="d5222" name="etime" class="Wdate" type="text" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'d5221\')}'})"/>
+
+        <input type="submit" class="btn btn-danger btn-sm" value="搜索">&nbsp;</form>
+    </div>
+    <if condition=" $_SESSION['aid'] eq 1">
+    <div class="nav_button">
+        <a href="javascript:;" onClick="edit_mul();"><button class="button" id="button1">+ 批量修改</button></a>
+    	<a href="javascript:;" onClick="add();"><button class="button">+ 添加用户</button></a>
+        <a href="javascript:;" onClick="add_excel();"><button class="button">+ 导入用户</button></a>
+        <a href="javascript:;" onClick="out_excel();"><button class="button">+ 导出用户</button></a>
+    </div>
+    </if>
+</div>
+
+
+<div class="list">
+<table width="1126" height="648" border="1px" cellspacing="0px" bordercolor="#ccc">
+<tr>
+    <td colspan="2">2016</td>
+    <td width="54" rowspan="2">各小组</td>
+    <td width="38" rowspan="2">协议<br />
+        个数</td>
+    <td width="51" rowspan="2">现开实盘个数</td>
+    <td width="65" rowspan="2">现开模拟个数</td>
+    <td width="65" rowspan="2">预计保护客户个数</td>
+    <td width="66" rowspan="2">实际保护客户个数</td>
+    <td width="67" rowspan="2" bordercolor="#FF0000">预计实盘个数</td>
+    <td width="67" rowspan="2" bordercolor="#FF0000">实际实盘个数</td>
+    <td width="66" rowspan="2">网开模拟个数</td>
+    <td width="69" rowspan="2">激活个数</td>
+    <td width="63" rowspan="2">二次激活个数</td>
+    <td width="61" rowspan="2">有效户</td>
+    <td width="128" rowspan="2">&nbsp;</td>
+    <td width="69" rowspan="2">&nbsp;</td>
+</tr>
+<tr>
+    <td colspan="2">经理部门</td>
+</tr>
+<tr id="1">
+    <td width="37" rowspan="4">一部</td>
+    <td width="94" rowspan="4">沈广程</td>
+    <td>陈艳</td>
+    <td id="xy_1"><input type="text" name="xy_1" id="xy_11" size="6"/></td>
+    <td id="xksp_1"><input type="text" name="xksp_1" id="xksp_11" size="6" value="5454545"/></td>
+    <td id="xkmn_1"><input type="text" name="xkmn_1" id="xkmn_11" size="6" value="{$xz_xkmn1}"/></td>
+    <td id="yjbh_1"><input type="text" name="yjbh_1" id="yjbh_11" size="6" value=""/></td>
+    <td id="sjbh_1"><input type="text" name="sjbh_1" id="sjbh_11" size="6" value=""/></td>
+    <td id="yjsp_1"><input type="text" name="yjsp_1" id="yjsp_11" size="6" value=""/></td>
+    <td id="sjsp_1"><input type="text" name="sjsp_1" id="sjsp_11" size="6" value="{$xz_sjsp1}"/></td>
+    <td id="wkmn_1"><input type="text" name="wkmn_1" id="wkmn_11" size="6" value="{$xz_wkmn1}"/></td>
+    <td id="jhgs_1"><input type="text" name="jhgs_1" id="jhgs_11" size="6" value="{$xz_jhgs1}"/></td>
+    <td id="ecjh_1"><input type="text" name="ecjh_1" id="ecjh_11" size="6" value="{$xz_ecjh1}"/></td>
+    <td id="yx_1"><input type="text" name="yx_1" id="yx_11" size="6" value="{$xz_yx1}"/></td>
+    <td><div align="center">
+    <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+</div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td>朱艳</td>
+    <td id="xy_2"><input type="text" name="xy_2" id="xy_22" size="6"/></td>
+    <td id="xksp_2"><input type="text" name="xksp_2" id="xksp_22" size="6" value="{$xz_xksp2}"/></td>
+    <td id="xkmn_2"><input type="text" name="xkmn_2" id="xkmn_22" size="6" value="{$xz_xkmn2}"/></td>
+    <td id="yjbh_2"><input type="text" name="yjbh_2" id="yjbh_22" size="6" value=""/></td>
+    <td id="sjbh_2"><input type="text" name="sjbh_2" id="sjbh_22" size="6" value=""/></td>
+    <td id="yjsp_2"><input type="text" name="yjsp_2" id="yjsp_22" size="6" value=""/></td>
+    <td id="sjsp_2"><input type="text" name="sjsp_2" id="sjsp_22" size="6" value="{$xz_sjsp2}"/></td>
+    <td id="wkmn_2"><input type="text" name="wkmn_2" id="wkmn_22" size="6" value="{$xz_wkmn2}"/></td>
+    <td id="jhgs_2"><input type="text" name="jhgs_2" id="jhgs_22" size="6" value="{$xz_jhgs2}"/></td>
+    <td id="ecjh_2"><input type="text" name="ecjh_2" id="ecjh_22" size="6" value="{$xz_ecjh2}"/></td>
+    <td id="yx_2"><input type="text" name="yx_2" id="yx_22" size="6" value="{$xz_yx2}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td>肖云娟</td>
+    <td id="xy_3"><input type="text" name="xy_3" id="xy_33" size="6"/></td>
+    <td id="xksp_3"><input type="text" name="xksp_3" id="xksp_33" size="6" value="{$xz_xksp3}"/></td>
+    <td id="xkmn_3"><input type="text" name="xkmn_3" id="xkmn_33" size="6" value="{$xz_xkmn3}"/></td>
+    <td id="yjbh_3"><input type="text" name="yjbh_3" id="yjbh_33" size="6" value=""/></td>
+    <td id="sjbh_3"><input type="text" name="sjbh_3" id="sjbh_33" size="6" value=""/></td>
+    <td id="yjsp_3"><input type="text" name="yjsp_3" id="yjsp_33" size="6" value=""/></td>
+    <td id="sjsp_3"><input type="text" name="sjsp_3" id="sjsp_33" size="6" value="{$xz_sjsp3}"/></td>
+    <td id="wkmn_3"><input type="text" name="wkmn_3" id="wkmn_33" size="6" value="{$xz_wkmn3}"/></td>
+    <td id="jhgs_3"><input type="text" name="jhgs_3" id="jhgs_33" size="6" value="{$xz_jhgs3}"/></td>
+    <td id="ecjh_3"><input type="text" name="ecjh_3" id="ecjh_33" size="6" value="{$xz_ecjh3}"/></td>
+    <td id="yx_3"><input type="text" name="yx_3" id="yx_33" size="6" value="{$xz_yx3}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td>方顺兵</td>
+    <td id="xy_4"><input type="text" name="xy_4" id="xy_44" size="6"/></td>
+    <td id="xksp_4"><input type="text" name="xksp_3" id="xksp_44" size="6" value="{$xz_xksp4}"/></td>
+    <td id="xkmn_4"><input type="text" name="xkmn_4" id="xkmn_44" size="6" value="{$xz_xkmn4}"/></td>
+    <td id="yjbh_4"><input type="text" name="yjbh_4" id="yjbh_44" size="6" value=""/></td>
+    <td id="sjbh_4"><input type="text" name="sjbh_4" id="sjbh_44" size="6" value=""/></td>
+    <td id="yjsp_3"><input type="text" name="yjsp_4" id="yjsp_44" size="6" value=""/></td>
+    <td id="sjsp_4"><input type="text" name="sjsp_3" id="sjsp_44" size="6" value="{$xz_sjsp4}"/></td>
+    <td id="wkmn_4"><input type="text" name="wkmn_4" id="wkmn_44" size="6" value="{$xz_wkmn4}"/></td>
+    <td id="jhgs_4"><input type="text" name="jhgs_4" id="jhgs_44" size="6" value="{$xz_jhgs4}"/></td>
+    <td id="ecjh_4"><input type="text" name="ecjh_4" id="ecjh_44" size="6" value="{$xz_ecjh4}"/></td>
+    <td id="yx_4"><input type="text" name="yx_4" id="yx_44" size="6" value="{$xz_yx4}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td colspan="3" bgcolor="#66FFFF">合计</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF"></td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bordercolor="#FF0000" bgcolor="#66FFFF">&nbsp;</td>
+    <td bordercolor="#FF0000" bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+</tr>
+<tr>
+    <td rowspan="4">二部</td>
+    <td rowspan="4">王晓芳</td>
+    <td>王晓芳</td>
+    <td id="xy_5"><input type="text" name="xy_5" id="xy_55" size="6"/></td>
+    <td id="xksp_5"><input type="text" name="xksp_5" id="xksp_55" size="6" value="{$xz_xksp5}"/></td>
+    <td id="xkmn_5"><input type="text" name="xkmn_5" id="xkmn_55" size="6" value="{$xz_xkmn5}"/></td>
+    <td id="yjbh_5"><input type="text" name="yjbh_5" id="yjbh_55" size="6" value=""/></td>
+    <td id="sjbh_5"><input type="text" name="sjbh_5" id="sjbh_55" size="6" value=""/></td>
+    <td id="yjsp_5"><input type="text" name="yjsp_5" id="yjsp_55" size="6" value=""/></td>
+    <td id="sjsp_5"><input type="text" name="sjsp_5" id="sjsp_55" size="6" value="{$xz_sjsp5}"/></td>
+    <td id="wkmn_5"><input type="text" name="wkmn_5" id="wkmn_55" size="6" value="{$xz_wkmn5}"/></td>
+    <td id="jhgs_5"><input type="text" name="jhgs_5" id="jhgs_55" size="6" value="{$xz_jhgs5}"/></td>
+    <td id="ecjh_5"><input type="text" name="ecjh_5" id="ecjh_55" size="6" value="{$xz_ecjh5}"/></td>
+    <td id="yx_5"><input type="text" name="yx_1" id="yx_55" size="6" value="{$xz_yx5}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td>夏妍</td>
+    <td id="xy_6"><input type="text" name="xy_6" id="xy_66" size="6"/></td>
+    <td id="xksp_6"><input type="text" name="xksp_6" id="xksp_66" size="6" value="{$xz_xksp6}"/></td>
+    <td id="xkmn_6"><input type="text" name="xkmn_6" id="xkmn_66" size="6" value="{$xz_xkmn6}"/></td>
+    <td id="yjbh_6"><input type="text" name="yjbh_6" id="yjbh_66" size="6" value=""/></td>
+    <td id="sjbh_6"><input type="text" name="sjbh_6" id="sjbh_66" size="6" value=""/></td>
+    <td id="yjsp_6"><input type="text" name="yjsp_6" id="yjsp_66" size="6" value=""/></td>
+    <td id="sjsp_6"><input type="text" name="sjsp_6" id="sjsp_66" size="6" value="{$xz_sjsp6}"/></td>
+    <td id="wkmn_6"><input type="text" name="wkmn_6" id="wkmn_66" size="6" value="{$xz_wkmn6}"/></td>
+    <td id="jhgs_6"><input type="text" name="jhgs_6" id="jhgs_66" size="6" value="{$xz_jhgs6}"/></td>
+    <td id="ecjh_6"><input type="text" name="ecjh_6" id="ecjh_66" size="6" value="{$xz_ecjh6}"/></td>
+    <td id="yx_6"><input type="text" name="yx_1" id="yx_66" size="6" value="{$xz_yx6}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td>邵红裴</td>
+    <td id="xy_7"><input type="text" name="xy_7" id="xy_77" size="6"/></td>
+    <td id="xksp_7"><input type="text" name="xksp_7" id="xksp_77" size="6" value="{$xz_xksp7}"/></td>
+    <td id="xkmn_7"><input type="text" name="xkmn_7" id="xkmn_77" size="6" value="{$xz_xkmn7}"/></td>
+    <td id="yjbh_7"><input type="text" name="yjbh_7" id="yjbh_77" size="6" value=""/></td>
+    <td id="sjbh_7"><input type="text" name="sjbh_7" id="sjbh_77" size="6" value=""/></td>
+    <td id="yjsp_7"><input type="text" name="yjsp_7" id="yjsp_77" size="6" value=""/></td>
+    <td id="sjsp_7"><input type="text" name="sjsp_7" id="sjsp_77" size="6" value="{$xz_sjsp7}"/></td>
+    <td id="wkmn_7"><input type="text" name="wkmn_7" id="wkmn_77" size="6" value="{$xz_wkmn7}"/></td>
+    <td id="jhgs_7"><input type="text" name="jhgs_7" id="jhgs_77" size="6" value="{$xz_jhgs7}"/></td>
+    <td id="ecjh_7"><input type="text" name="ecjh_7" id="ecjh_77" size="6" value="{$xz_ecjh7}"/></td>
+    <td id="yx_7"><input type="text" name="yx_1" id="yx_77" size="6" value="{$xz_yx7}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td>王俊</td>
+    <td id="xy_8"><input type="text" name="xy_8" id="xy_88" size="6"/></td>
+    <td id="xksp_8"><input type="text" name="xksp_8" id="xksp_88" size="6" value="{$xz_xksp8}"/></td>
+    <td id="xkmn_8"><input type="text" name="xkmn_8" id="xkmn_88" size="6" value="{$xz_xkmn8}"/></td>
+    <td id="yjbh_8"><input type="text" name="yjbh_8" id="yjbh_88" size="6" value=""/></td>
+    <td id="sjbh_8"><input type="text" name="sjbh_8" id="sjbh_88" size="6" value=""/></td>
+    <td id="yjsp_8"><input type="text" name="yjsp_8" id="yjsp_88" size="6" value=""/></td>
+    <td id="sjsp_8"><input type="text" name="sjsp_8" id="sjsp_88" size="6" value="{$xz_sjsp8}"/></td>
+    <td id="wkmn_8"><input type="text" name="wkmn_8" id="wkmn_88" size="6" value="{$xz_wkmn8}"/></td>
+    <td id="jhgs_8"><input type="text" name="jhgs_8" id="jhgs_88" size="6" value="{$xz_jhgs8}"/></td>
+    <td id="ecjh_8"><input type="text" name="ecjh_8" id="ecjh_88" size="6" value="{$xz_ecjh8}"/></td>
+    <td id="yx_8"><input type="text" name="yx_1" id="yx_88" size="6" value="{$xz_yx8}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td colspan="3" bgcolor="#66FFFF">合计</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bordercolor="#FF0000" bgcolor="#66FFFF">&nbsp;</td>
+    <td bordercolor="#FF0000" bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+</tr>
+<tr>
+    <td rowspan="3">三部</td>
+    <td rowspan="3">仝绍飞</td>
+    <td>李志刚</td>
+    <td id="xy_9"><input type="text" name="xy_9" id="xy_99" size="6"/></td>
+    <td id="xksp_9"><input type="text" name="xksp_9" id="xksp_99" size="6" value="{$xz_xksp9}"/></td>
+    <td id="xkmn_9"><input type="text" name="xkmn_9" id="xkmn_99" size="6" value="{$xz_xkmn9}"/></td>
+    <td id="yjbh_9"><input type="text" name="yjbh_9" id="yjbh_99" size="6" value=""/></td>
+    <td id="sjbh_9"><input type="text" name="sjbh_9" id="sjbh_99" size="6" value=""/></td>
+    <td id="yjsp_9"><input type="text" name="yjsp_9" id="yjsp_99" size="6" value=""/></td>
+    <td id="sjsp_9"><input type="text" name="sjsp_9" id="sjsp_99" size="6" value="{$xz_sjsp9}"/></td>
+    <td id="wkmn_9"><input type="text" name="wkmn_9" id="wkmn_99" size="6" value="{$xz_wkmn9}"/></td>
+    <td id="jhgs_9"><input type="text" name="jhgs_9" id="jhgs_99" size="6" value="{$xz_jhgs9}"/></td>
+    <td id="ecjh_9"><input type="text" name="ecjh_9" id="ecjh_99" size="6" value="{$xz_ecjh9}"/></td>
+    <td id="yx_9"><input type="text" name="yx_1" id="yx_99" size="6" value="{$xz_yx9}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+  <td>李贺</td>
+    <td id="xy_10"><input type="text" name="xy_10" id="xy_1010" size="6"/></td>
+    <td id="xksp_10"><input type="text" name="xksp_10" id="xksp_1010" size="6" value="{$xz_xksp10}"/></td>
+    <td id="xkmn_10"><input type="text" name="xkmn_10" id="xkmn_1010" size="6" value="{$xz_xkmn10}"/></td>
+    <td id="yjbh_10"><input type="text" name="yjbh_10" id="yjbh_1010" size="6" value=""/></td>
+    <td id="sjbh_10"><input type="text" name="sjbh_10" id="sjbh_1010" size="6" value=""/></td>
+    <td id="yjsp_10"><input type="text" name="yjsp_10" id="yjsp_1010" size="6" value=""/></td>
+    <td id="sjsp_10"><input type="text" name="sjsp_10" id="sjsp_1010" size="6" value="{$xz_sjsp10}"/></td>
+    <td id="wkmn_10"><input type="text" name="wkmn_10" id="wkmn_1010" size="6" value="{$xz_wkmn10}"/></td>
+    <td id="jhgs_10"><input type="text" name="jhgs_10" id="jhgs_1010" size="6" value="{$xz_jhgs10}"/></td>
+    <td id="ecjh_10"><input type="text" name="ecjh_10" id="ecjh_1010" size="6" value="{$xz_ecjh10}"/></td>
+    <td id="yx_10"><input type="text" name="yx_1" id="yx_1010" size="6" value="{$xz_yx10}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+  <td>李兰兰</td>
+    <td id="xy_11t"><input type="text" name="xy_11" id="xy_1111" size="6"/></td>
+    <td id="xksp_11t"><input type="text" name="xksp_11" id="xksp_1111" size="6" value="{$xz_xksp11}"/></td>
+    <td id="xkmn_11t"><input type="text" name="xkmn_11" id="xkmn_1111" size="6" value="{$xz_xkmn11}"/></td>
+    <td id="yjbh_11t"><input type="text" name="yjbh_11" id="yjbh_1111" size="6" value=""/></td>
+    <td id="sjbh_11t"><input type="text" name="sjbh_11" id="sjbh_1111" size="6" value=""/></td>
+    <td id="yjsp_11t"><input type="text" name="yjsp_11" id="yjsp_1111" size="6" value=""/></td>
+    <td id="sjsp_11t"><input type="text" name="sjsp_11" id="sjsp_1111" size="6" value="{$xz_sjsp11}"/></td>
+    <td id="wkmn_11t"><input type="text" name="wkmn_11" id="wkmn_1111" size="6" value="{$xz_wkmn11}"/></td>
+    <td id="jhgs_11t"><input type="text" name="jhgs_11" id="jhgs_1111" size="6" value="{$xz_jhgs11}"/></td>
+    <td id="ecjh_11t"><input type="text" name="ecjh_11" id="ecjh_1111" size="6" value="{$xz_ecjh11}"/></td>
+    <td id="yx_11t"><input type="text" name="yx_1" id="yx_1111" size="6" value="{$xz_yx11}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit11();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td colspan="4" bgcolor="#66FFFF">合计</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bordercolor="#FF0000" bgcolor="#66FFFF">&nbsp;</td>
+    <td bordercolor="#FF0000" bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+    <td bgcolor="#66FFFF">&nbsp;</td>
+</tr>
+<tr>
+    <td rowspan="5">四部</td>
+    <td rowspan="5">张艳</td>
+    <td>孙陇</td>
+    <td id="xy_12"><input type="text" name="xy_12" id="xy_1212" size="6"/></td>
+    <td id="xksp_12"><input type="text" name="xksp_12" id="xksp_1212" size="6" value="{$xz_xksp12}"/></td>
+    <td id="xkmn_12"><input type="text" name="xkmn_12" id="xkmn_1212" size="6" value="{$xz_xkmn12}"/></td>
+    <td id="yjbh_12"><input type="text" name="yjbh_12" id="yjbh_1212" size="6" value=""/></td>
+    <td id="sjbh_12"><input type="text" name="sjbh_12" id="sjbh_1212" size="6" value=""/></td>
+    <td id="yjsp_12"><input type="text" name="yjsp_12" id="yjsp_1212" size="6" value=""/></td>
+    <td id="sjsp_12"><input type="text" name="sjsp_12" id="sjsp_1212" size="6" value="{$xz_sjsp12}"/></td>
+    <td id="wkmn_12"><input type="text" name="wkmn_12" id="wkmn_1212" size="6" value="{$xz_wkmn12}"/></td>
+    <td id="jhgs_12"><input type="text" name="jhgs_12" id="jhgs_1212" size="6" value="{$xz_jhgs12}"/></td>
+    <td id="ecjh_12"><input type="text" name="ecjh_12" id="ecjh_1212" size="6" value="{$xz_ecjh12}"/></td>
+    <td id="yx_12"><input type="text" name="yx_1" id="yx_1212" size="6" value="{$xz_yx12}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit12();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+  <td>尹晶</td>
+    <td id="xy_13"><input type="text" name="xy_13" id="xy_1313" size="6"/></td>
+    <td id="xksp_13"><input type="text" name="xksp_13" id="xksp_1313" size="6" value="{$xz_xksp13}"/></td>
+    <td id="xkmn_13"><input type="text" name="xkmn_13" id="xkmn_1313" size="6" value="{$xz_xkmn13}"/></td>
+    <td id="yjbh_13"><input type="text" name="yjbh_13" id="yjbh_1313" size="6" value=""/></td>
+    <td id="sjbh_13"><input type="text" name="sjbh_13" id="sjbh_1313" size="6" value=""/></td>
+    <td id="yjsp_13"><input type="text" name="yjsp_13" id="yjsp_1313" size="6" value=""/></td>
+    <td id="sjsp_13"><input type="text" name="sjsp_13" id="sjsp_1313" size="6" value="{$xz_sjsp13}"/></td>
+    <td id="wkmn_13"><input type="text" name="wkmn_13" id="wkmn_1313" size="6" value="{$xz_wkmn13}"/></td>
+    <td id="jhgs_13"><input type="text" name="jhgs_13" id="jhgs_1313" size="6" value="{$xz_jhgs13}"/></td>
+    <td id="ecjh_13"><input type="text" name="ecjh_13" id="ecjh_1313" size="6" value="{$xz_ecjh13}"/></td>
+    <td id="yx_13"><input type="text" name="yx_1" id="yx_1313" size="6" value="{$xz_yx13}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit13();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+  <td>郝宝</td>
+    <td id="xy_14"><input type="text" name="xy_14" id="xy_1414" size="6"/></td>
+    <td id="xksp_14"><input type="text" name="xksp_14" id="xksp_1414" size="6" value="{$xz_xksp14}"/></td>
+    <td id="xkmn_14"><input type="text" name="xkmn_14" id="xkmn_1414" size="6" value="{$xz_xkmn14}"/></td>
+    <td id="yjbh_14"><input type="text" name="yjbh_14" id="yjbh_1414" size="6" value=""/></td>
+    <td id="sjbh_14"><input type="text" name="sjbh_14" id="sjbh_1414" size="6" value=""/></td>
+    <td id="yjsp_14"><input type="text" name="yjsp_14" id="yjsp_1414" size="6" value=""/></td>
+    <td id="sjsp_14"><input type="text" name="sjsp_14" id="sjsp_1414" size="6" value="{$xz_sjsp14}"/></td>
+    <td id="wkmn_14"><input type="text" name="wkmn_14" id="wkmn_1414" size="6" value="{$xz_wkmn14}"/></td>
+    <td id="jhgs_14"><input type="text" name="jhgs_14" id="jhgs_1414" size="6" value="{$xz_jhgs14}"/></td>
+    <td id="ecjh_14"><input type="text" name="ecjh_14" id="ecjh_1414" size="6" value="{$xz_ecjh14}"/></td>
+    <td id="yx_14"><input type="text" name="yx_1" id="yx_1414" size="6" value="{$xz_yx14}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit14();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+  <td>刘付东</td>
+    <td id="xy_15"><input type="text" name="xy_15" id="xy_1515" size="6"/></td>
+    <td id="xksp_15"><input type="text" name="xksp_15" id="xksp_1515" size="6" value="{$xz_xksp15}"/></td>
+    <td id="xkmn_15"><input type="text" name="xkmn_15" id="xkmn_1515" size="6" value="{$xz_xkmn15}"/></td>
+    <td id="yjbh_15"><input type="text" name="yjbh_15" id="yjbh_1515" size="6" value=""/></td>
+    <td id="sjbh_15"><input type="text" name="sjbh_15" id="sjbh_1515" size="6" value=""/></td>
+    <td id="yjsp_15"><input type="text" name="yjsp_15" id="yjsp_1515" size="6" value=""/></td>
+    <td id="sjsp_15"><input type="text" name="sjsp_15" id="sjsp_1515" size="6" value="{$xz_sjsp15}"/></td>
+    <td id="wkmn_15"><input type="text" name="wkmn_15" id="wkmn_1515" size="6" value="{$xz_wkmn15}"/></td>
+    <td id="jhgs_15"><input type="text" name="jhgs_15" id="jhgs_1515" size="6" value="{$xz_jhgs15}"/></td>
+    <td id="ecjh_15"><input type="text" name="ecjh_15" id="ecjh_1515" size="6" value="{$xz_ecjh15}"/></td>
+    <td id="yx_15"><input type="text" name="yx_1" id="yx_1515" size="6" value="{$xz_yx15}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit15();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+  <td>杨阳</td>
+    <td id="xy_16"><input type="text" name="xy_16" id="xy_1616" size="6"/></td>
+    <td id="xksp_16"><input type="text" name="xksp_16" id="xksp_1616" size="6" value="{$xz_xksp16}"/></td>
+    <td id="xkmn_16"><input type="text" name="xkmn_16" id="xkmn_1616" size="6" value="{$xz_xkmn16}"/></td>
+    <td id="yjbh_16"><input type="text" name="yjbh_16" id="yjbh_1616" size="6" value=""/></td>
+    <td id="sjbh_16"><input type="text" name="sjbh_16" id="sjbh_1616" size="6" value=""/></td>
+    <td id="yjsp_16"><input type="text" name="yjsp_16" id="yjsp_1616" size="6" value=""/></td>
+    <td id="sjsp_16"><input type="text" name="sjsp_16" id="sjsp_1616" size="6" value="{$xz_sjsp16}"/></td>
+    <td id="wkmn_16"><input type="text" name="wkmn_16" id="wkmn_1616" size="6" value="{$xz_wkmn16}"/></td>
+    <td id="jhgs_16"><input type="text" name="jhgs_16" id="jhgs_1616" size="6" value="{$xz_jhgs16}"/></td>
+    <td id="ecjh_16"><input type="text" name="ecjh_16" id="ecjh_1616" size="6" value="{$xz_ecjh16}"/></td>
+    <td id="yx_16"><input type="text" name="yx_1" id="yx_1616" size="6" value="{$xz_yx16}"/></td>
+    <td><div align="center">
+        <!--<a href="javascript:;" onclick="tj_edit16();">编辑</a>-->
+    </div></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr>
+    <td>合计</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td>合计</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td height="43" colspan="16">备注：</td>
+</tr>
+</table>
+
+</table>
+  </table>
+</div>
+
+<!-- 分页 -->
+<div class="page">
+<!--{$page}-->
+</div>
+
+
+</body>
+</html>

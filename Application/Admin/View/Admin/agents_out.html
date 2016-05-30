@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=">
+    <title>经纪人离职</title>
+    <link rel="stylesheet" href="__PUBLIC__/Admin/css/css.css">
+    <script src="__PUBLIC__/Admin/js/jquery-1.9.1.js"></script>
+    <script src="__PUBLIC__/Common/Layer/layer.js"></script>
+    <script src="__PUBLIC__/Common/My97Date/WdatePicker.js"></script>
+</head>
+<body>
+<div class="nav">
+    <div class="nav_title">
+        <h4><span class="nav_a"><a href="{:U('Admin/agent_list')}">经纪人列表</a></span><img class="nav_img" src="__PUBLIC__/Admin/img/tab.gif" /><span class="nav_a">经纪人离职列表</span></h4>
+    </div>
+    <div class="nav_title" id="shai_x">
+        <form name="form1" class="formSo" method="get" action="{:U('Admin/agent_list')}">
+            <input name="keyword" type="hidden" id="keyword" value="" class="s26" />
+            <input name="sx" type="hidden" id="sx" value="" class="s26" />
+            <input name="order" type="hidden" id="order" value="" class="s26" />
+            <input type="submit" id="tj" class="btn btn-danger btn-sm" value="">&nbsp;
+        </form>
+    </div>
+    <div class="nav_title" id="paixu">
+        <form name="form3" class="formPx" method="get" action="{:U('Admin/agent_list')}">
+            <input name="order" type="hidden" id="orders" value="" class="s26" />
+            <input type="submit" id="pxtj" class="btn btn-danger btn-sm" value="">&nbsp;
+        </form>
+    </div>
+</div>
+
+
+<div class="list">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="list_table">
+        <form name="searchform" method="get" action="">
+            <select name="member">
+                <option value="">选择条件</option>
+                <option value="agentname" <if condition="I('member') eq 'agentname'">selected="selected"</if>>经纪人</option>
+                <option value="jobnumber" <if condition="I('member') eq 'jobnumber'">selected="selected"</if>>工号</option>
+            </select>
+            <input type="text" name="textsearcherkeywords" value="{:I('textsearcherkeywords')}" />
+            <input name="sousuo" type="submit" value="搜索" class="imgbtn" />
+        </form>
+        <form action="__URL__/edit_mul" method="post" id="form2">
+            <thead>
+            <tr class="action">
+                <td width="1%" id="timeout"><div align="center">离职时间</div></td>
+                <td width="2%"><div align="center">工号</div></td>
+                <td width="2%"><div align="center">经纪人姓名</div></td>
+            </tr>
+            </thead>
+            <tbody>
+            <foreach name="lists" item="vo">
+                <tr>
+                    <td height="40" id="time">
+                        <div align="center" id="times">{$vo.time}</div>
+                    </td>
+                <td>
+                    <div align="center">{$vo.jobnumber}</div>
+                </td>
+                <td>
+                    <div align="center">{$vo.agentname}</div>
+                </td>
+                </tr>
+            </foreach>
+            </tbody>
+        </form>
+    </table>
+</div>
+<!-- 分页 -->
+<div class="page">
+    {$page}
+</div>
+</body>
+</html>

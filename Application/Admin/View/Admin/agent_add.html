@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=">
+    <title>后台管理系统</title>
+    <link rel="stylesheet" href="__PUBLIC__/Admin/css/css.css">
+    <script src="__PUBLIC__/Admin/js/jquery-1.9.1.js"></script>
+    <script src="__PUBLIC__/Common/Layer/layer.js"></script>
+    <script src="__PUBLIC__/Common/My97Date/WdatePicker.js"></script>
+    <script>
+        $(function(){
+            $('#loginname').keyup(function(){
+                var loginname = $('#loginname').val();
+                if(loginname.length >= 5){
+                    $.get("{:U('Admin/check_loginname')}",{"loginname":loginname},function(data){
+                        if(data == 1){
+                            $('#loginname_trips').html(' × 账号已存在');
+                            $('#loginname_trips').css('color','red');
+                            $('#loginname_hidden').val(1);
+                        }else{
+                            $('#loginname_trips').html(' √ 账号可用');
+                            $('#loginname_trips').css('color','blue');
+                            $('#loginname_hidden').val(0);
+                        }
+                    }, "json");
+                }
+            });
+        });
+    </script>
+    <script>
+        function agent_add(){
+
+            var jobnumber = $('#jobnumber').val();
+            var agentname = $('#agentname').val();
+            var codeid = $('#codeid').val();
+            var tel = $('#tel').val();
+            var department_x = $('#department_x').val();
+            var groupname = $('#groupname').val();
+            if(jobnumber == ''){
+                layer.tips('请输入工号', '#jobnumber');
+                return false;
+            }
+            if(agentname == ''){
+                layer.tips('请输入经纪人名', '#agentname');
+                return false;
+            }
+            if(codeid == ''){
+                layer.tips('请输身份证号码', '#codeid');
+                return false;
+            }
+            if(tel == ''){
+                layer.tips('请输入电话', '#tel');
+                return false;
+            }
+
+            if(groupname == ''){
+                layer.tips('请输入小组', '#groupname');
+                return false;
+            }
+            if(department_x == ''){
+                layer.tips('请输入经纪人名', '#department_x');
+                return false;
+            }
+            if(loginname_hidden == 1){
+                layer.msg('账号重复，请重新输入');
+                return false;
+            }
+            $.post(	"__SELF__",{"jobnumber":jobnumber,"agentname":agentname,"codeid":codeid,"tel":tel,
+                "department_x":department_x,"groupname":groupname},function(data){
+                if(data == 1){
+                    layer.msg('添加成功，正在跳转中...',{icon: 1,time: 2000,shade: [0.8, '#393D49']},function(){
+                        window.location.reload();    //刷新父页面
+                    });
+                }else if(data == 2){
+                    layer.msg('分配用户组失败，请重新分配',{icon: 2,time: 2000},function(){
+                        window.location.reload();
+                    });
+                }else{
+                    layer.msg('添加失败，请重新输入',{icon: 2,time: 2000},function(){
+                        window.location.reload();
+                    });
+                }
+            }, "json");
+        }
+
+
+    </script>
+</head>
+<body>
+<div class="list">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="details">
+        <tbody>
+        <tr>
+            <td><div align="right">工号：</div></td>
+            <td><input type="text" name="jobnumber" id="jobnumber" size="24" value="{$vo.jobnumber}" /></td>
+        </tr>
+        <tr>
+            <td><div align="right">经纪人：</div></td>
+            <td><input type="text" name="agentname" id="agentname" size="24" value="{$vo.agentname}" />
+                <input type="hidden" id="loginname_hidden" value="0" />
+                <span id="loginname_trips"> *</span>
+            </td>
+        </tr>
+        <tr>
+            <td><div align="right">身份证号：</div></td>
+            <td><input type="text" name="codeid" id="codeid" size="24" value="{$vo.codeid}" /></td>
+        </tr>
+
+        <tr>
+            <td><div align="right">联系电话：</div></td>
+            <td>
+                <input style="display: block; float: left;" type="text" name="tel" id="tel" size="24" value="{$vo.tel}" />
+            </td>
+        </tr>
+        <tr>
+            <td><div align="right">部门：</div></td>
+            <td><input type="text" name="department_x" id="department_x" size="24" value="{$vo.department_x}" />*(请输入1-7)</td>
+        </tr>
+        <tr>
+            <td><div align="right">小组：</div></td>
+            <td><input type="text" name="groupname" id="groupname" size="24" value="{$vo.groupname}" /></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="footer">
+    <button type="button" class="button" id="button" style="min-width:160px;" onclick="agent_add();">确 认</button>
+</div>
+
+</body>
+</html>

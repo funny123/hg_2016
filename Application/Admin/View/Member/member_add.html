@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=">
+<title>后台管理系统</title>
+<link rel="stylesheet" href="__PUBLIC__/Admin/css/css.css">
+<script src="__PUBLIC__/Admin/js/jquery-1.9.1.js"></script>
+<script src="__PUBLIC__/Common/Layer/layer.js"></script>
+    <script src="__PUBLIC__/Common/My97Date/WdatePicker.js"></script>
+<script>
+$(function(){
+	$('#loginname').keyup(function(){
+		var loginname = $('#loginname').val();
+		if(loginname.length >= 8){
+			$.get("{:U('Member/check_loginname')}",{"loginname":loginname},function(data){
+					if(data == 1){
+						$('#loginname_trips').html(' × 账号已存在');
+						$('#loginname_trips').css('color','red');
+						$('#loginname_hidden').val(1);
+					}else{
+						$('#loginname_trips').html(' √ 账号可用');
+						$('#loginname_trips').css('color','blue');
+						$('#loginname_hidden').val(0);
+					}
+				}, "json");	
+		}
+	});
+});
+</script>
+<script>
+function member_add(){
+		var loginname = $('#loginname').val();
+
+		var time = $('#time').val();
+		var moniname = $('#moniname').val();
+		var realname = $('#realname').val();
+		var codeid = $('#codeid').val();
+        var jihuomoney = $('#jihuomoney').val();
+        var jihuotime = $('#jihuotime').val();
+        var tel = $('#tel').val();
+        var email = $('#email').val();
+        var address = $('#address').val();
+        var sex = $('#sex').val();
+        var birthday = $('#birthday').val();
+        var agentname = $('#agentname').val();
+        var kaihuform = $('#kaihuform').val();
+        var department = $('#department').val();
+        var groupname = $('#groupname').val();
+        var loginuser = $('#loginuser').val();
+        var remark = $('#remark').val();
+        var telextend=$('#telextend').val();
+        var jhtextend=$('#jhtextend').val();
+        var remarkextend=$('#remarkextend').val();
+
+		if(loginname == ''){
+			layer.tips('请输入用户名', '#loginname');
+			return false;
+		}
+		if(loginname.length < 5){
+			layer.tips('长度不应低于8位', '#loginname');
+			return false;
+		}
+        if(codeid.length != 18){
+            layer.tips('请输入有效身份证号', '#codeid');
+            return false;
+        }
+        if(tel.length != 11){
+            layer.tips('请输入有效联系方式', '#tel');
+            return false;
+        }
+            //部门条件
+        if(department==''){
+            layer.tips('请输入数字(1-7)', '#department');
+            return false;
+        }
+
+		if(realname == ''){
+			layer.tips('请输入真实姓名', '#realname');
+			return false;
+		}
+
+		if(loginname_hidden == 1){
+			layer.msg('账号重复，请重新输入');
+			return false;
+		}
+		$.post(	"__SELF__",{"loginname":loginname,"time":time,"moniname":moniname,"realname":realname,"codeid":codeid,"jihuomoney":jihuomoney
+            ,"jihuotime":jihuotime,"tel":tel,"email":email,"address":address,"sex":sex,"birthday":birthday,"agentname":agentname
+            ,"kaihuform":kaihuform,"remark":remark,"loginuser":loginuser,"remark":remark,"department":department
+            ,"groupname":groupname,"remark":remark,telextend:telextend,jhtextend:jhtextend,remarkextend:remarkextend},function(data){
+				if(data == 1){
+					layer.msg('添加成功，正在跳转中...',{icon: 1,time: 2000,shade: [0.8, '#393D49']},function(){
+						window.location.reload();    //刷新父页面
+					});
+				}else if(data == 2){
+					layer.msg('分配用户组失败，请重新分配',{icon: 2,time: 2000},function(){
+						window.location.reload();
+					});
+				}else{
+					layer.msg('添加失败，请重新输入',{icon: 2,time: 2000},function(){
+						window.location.reload();
+					});
+				}
+			}, "json");
+}
+
+function text1(){
+    $("#telextend").css("display","block");
+}
+function  text2(){
+    $("#jhtextend").css("display","block");
+}
+function  text3(){
+    $("#remarkextend").css("display","block");
+}
+
+</script>
+</head>
+<body>
+<div class="list">
+	  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="details">
+        <tbody>
+	      <tr>
+	      	<td width="25%"><div align="right">交易账户：</div></td>
+	      	<td width="75%"><input type="text" name="loginname" id="loginname" size="24" value="{$vo.loginname}" />
+            <input type="hidden" id="loginname_hidden" value="0" />
+            <span id="loginname_trips"> * 长度不低于5位</span>
+            </td>
+	      </tr>
+          <tr>
+              <td><div align="right">开户时间：</div></td>
+              <td><input type="text" name="time" id="time" size="34" value="{$vo.time}" class="Wdate" onFocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy/MM/dd'})"/></td>
+          </tr>
+          <tr>
+              <td><div align="right">模拟帐号：</div></td>
+              <td><input type="text" name="moniname" id="moniname" size="24" value="{$vo.moniname}" /></td>
+          </tr>
+          <tr>
+	      	<td><div align="right">真实姓名：</div></td>
+	      	<td><input type="text" name="realname" id="realname" size="24" value="{$vo.realname}" /></td>
+	      </tr>
+          <tr>
+            <td><div align="right">身份证号：</div></td>
+            <td><input type="text" name="codeid" id="codeid" size="24" value="{$vo.codeid}" /></td>
+          </tr>
+          <tr>
+              <td><div align="right">激活资金(元)：</div></td>
+              <td><input type="text" name="jihuomoney" id="jihuomoney" size="24" value="{$vo.jihuomoney}" /></td>
+          </tr>
+          <tr>
+              <td><div align="right">激活时间：</div></td>
+              <td>
+                  <input style="display: block; float: left;" type="text" name="jihuotime" id="jihuotime" size="24" value="{$vo.jihuotime}" class="Wdate" onFocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy/MM/dd'})" />
+                  <a style="display: block; float: left;" onclick="text2()"><img id="jia" src="__PUBLIC__/admin/img/jia.png"></a>
+                  <input id="jhtextend" style="display: none;" type="text" name="jhtextend"  value="{$vo.jhtextend}"  />
+              </td>
+          </tr>
+          <tr>
+              <td><div align="right">联系电话：</div></td>
+              <td>
+                  <input style="display: block; float: left;" type="text" name="tel" id="tel" size="24" value="{$vo.tel}" />
+                  <a style="display: block; float: left;" onclick="text1()"><img id="jia" src="__PUBLIC__/admin/img/jia.png"></a>
+                  <input id="telextend" style="display: none;" type="text" name="telextend"  value="{$vo.telextend}"  />
+              </td>
+          </tr>
+          <tr>
+              <td><div align="right">邮箱：</div></td>
+              <td><input type="text" name="email" id="email" size="24" value="{$vo.email}" /></td>
+          </tr>
+          <tr>
+              <td><div align="right">地址：</div></td>
+              <td><input type="text" name="address" id="address" size="24" value="{$vo.address}" /></td>
+          </tr>
+          <tr>
+              <td><div align="right">性别：</div></td>
+              <td>
+                  <select  name="sex" id="sex"  class="form-control">
+                      <neq name="info.sex" value=""><option value="{$vo.sex}">{$vo.sex}</option></neq>
+                      <option value="男">男</option>
+                      <option value="女">女</option>
+              </td>
+          </tr>
+          <tr>
+              <td><div align="right">生日：</div></td>
+              <td><input type="text" name="birthday" id="birthday" size="24" value="{$vo.birthday}" class="Wdate" onFocus="WdatePicker({lang:'zh-cn',dateFmt:'MM-dd'})"/></td>
+          </tr>
+          <tr>
+              <td><div align="right">经纪人：</div></td>
+              <!--<td><input type="text" name="agentname" id="agentname" size="24" value="{$vo.agentname}" /></td>-->
+              <td><select name="agentname" id="agentname" style="height:32px;">
+                  <option value="">----- 请选择经纪人 -----</option>
+                  <foreach name="data" item="vo">
+                      <option value="{$vo.id}">{$vo.agentname}</option>
+                  </foreach>
+              </select>
+              </td>
+          </tr>
+          <tr>
+              <td><div align="right">开户形式：</div></td>
+              <td>
+                  <select  name="kaihuform" id="kaihuform"  class="form-control">
+                      <neq name="info.kaihuform" value=""><option value="{$vo.kaihuform}">{$vo.kaihuForm}</option></neq>
+                      <option value="网开">网开</option>
+                      <option value="现开">现开</option>
+                      <option value="实盘网开模拟现开">实盘网开模拟现开</option>
+                      <option value="模拟现开实盘未开">模拟现开实盘未开</option>
+                  </select>
+              </td>
+          </tr>
+          <tr>
+              <td><div align="right">部门：</div></td>
+              <td><input type="text" name="department" id="department" size="24" value="{$vo.department}" /> *请填数字！（1-7）</td>
+          </tr>
+          <tr>
+              <td><div align="right">小组：</div></td>
+              <td><input type="text" name="groupname" id="groupname" size="24" value="{$vo.groupname}" /></td>
+          </tr>
+          <tr>
+              <td><div align="right">登录名：</div></td>
+              <td><input type="text" name="loginuser" id="loginuser" size="24" value="{$vo.loginuser}" /></td>
+          </tr>
+          <tr>
+              <td><div align="right">备注：</div></td>
+              <td>
+                  <input style="display: block; float: left;" type="text" name="remark" id="remark" size="24" value="{$vo.remark}" />
+                  <a style="display: block; float: left;" onclick="text3()"><img id="jia" src="__PUBLIC__/admin/img/jia.png"></a>
+                  <input id="remarkextend" style="display: none;" type="text" name="remarkextend"  value="{$vo.remarkextend}"  />
+              </td>
+          </tr>
+        </tbody>
+  </table>
+</div>
+<div class="footer">
+     <button type="button" class="button" id="button" style="min-width:160px;" onclick="member_add();">确 认</button>
+</div>
+
+</body>
+</html>

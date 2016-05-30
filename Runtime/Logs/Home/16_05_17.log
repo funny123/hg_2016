@@ -1,0 +1,9 @@
+[ 2016-05-17T11:59:58+08:00 ] ::1 /hg_2016/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000014s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000475s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000728s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000791s ]
+NOTIC: [8] Use of undefined constant Admin - assumed 'Admin' D:\xampp\htdocs\hg_2016\Application\Home\Controller\IndexController.class.php 第 10 行.
+

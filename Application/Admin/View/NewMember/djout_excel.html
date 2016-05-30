@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>导出用户</title>
+    <script src="__PUBLIC__/Common/My97Date/WdatePicker.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#sub").click(function(){
+                layer.load(1, {
+                    shade: [0.1,'#fff'] //0.1透明度的白色背景
+                });
+            });
+        })
+
+    </script>
+</head>
+<body>
+<form name="outexcel" method="post" action="" enctype="multipart/form-data">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="details">
+        <tbody>
+        <tr><td>
+            <select name="timeselect">
+                <option value="">选择条件</option>
+                <!--<option value="time_x" <if condition="I('timeselect') eq 'time_x'">selected="selected"</if>>更改时间</option>-->
+                <option value="groupname_x" <if condition="I('timeselect') eq 'groupname_x'">selected="selected"</if>>小组</option>
+                <option value="department_x" <if condition="I('timeselect') eq 'department_x'">selected="selected"</if>>部门</option>
+                <option value="agentname_x" <if condition="I('timeselect') eq 'agentname_x'">selected="selected"</if>>经纪人</option>
+            </select>
+        </td></tr>
+        <tr>
+            <td>
+                <!--<input type="text" name="startime"  class="Wdate" value="{:I('startime')}"  onFocus="WdatePicker({lang:'zh-cn',dateFmt:'yy-MM-dd'})" readonly/>&nbsp;至&nbsp;<input type="text" name="endtime"  class="Wdate" value="{:I('endtime')}"  onFocus="WdatePicker({lang:'zh-cn',dateFmt:'yy-MM-dd'})"  readonly />&nbsp;-->
+                <!--<input type="hidden" name="type" value="{:I('type')}">-->
+                <input type="text" name="textsearcherkeywords" value="{:I('textsearcherkeywords')}" />
+            </td>
+        </tr>
+
+        <tr><td><div><input type="submit" name="sub" value="导出" id="sub"></div></td></tr>
+        </tbody>
+    </table>
+</form>
+</body>
+</html>

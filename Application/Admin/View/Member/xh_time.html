@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=">
+    <title>编辑</title>
+    <link rel="stylesheet" href="__PUBLIC__/Admin/css/css.css">
+    <script src="__PUBLIC__/Admin/js/jquery-1.9.1.js"></script>
+    <script src="__PUBLIC__/Common/Layer/layer.js"></script>
+    <script src="__PUBLIC__/Common/My97Date/WdatePicker.js"></script>
+    <script>
+        //删除用户
+        function  del(id){
+            $("#del"+id+" td").css('background','#CBDFF2');
+            parent.layer.confirm('真的要销户吗？', {
+                btn: ['确认','取消'], //按钮
+                shade: 0.5 //显示遮罩
+            }, function(){
+                var time=$('#xh_time').val();
+                $.post("{:U('Member/member_del')}", { "id": id,"time":time},function(data){
+                    if(data == 1){
+                        parent.layer.msg('销户成功', { icon: 1, time: 1000 }, function(){
+                            window.parent.location.reload();
+                        });
+                    }else{
+                        parent.layer.msg('销户失败', {icon: 2, time: 2000 });
+                    }
+                }, "json");
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="list">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="details">
+        <tbody>
+        <tr>
+            <td><div align="right">销户时间：</div></td>
+            <td><input type="text" name="xh_time" id="xh_time" size="24" value="" class="Wdate" onFocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy/MM/dd'})" /></td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+<div class="footer">
+        <button class="button" type="button"   onClick="del({:I('id')})">确定</button>
+    <!--onclick="del({$vo['id']})-->
+</div>
+
+</body>
+</html>
